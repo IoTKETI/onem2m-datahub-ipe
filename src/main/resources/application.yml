@@ -1,0 +1,95 @@
+spring:
+  application:
+    name: datahub-ipe-integration
+
+  datasource:
+    # IPE Mapping Rule Database Info
+    url: jdbc:log4jdbc:postgresql://1.1.1.1:5432/KETI_IPE?currentSchema=ipe
+    username: test
+    password: test
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    hikari:
+      pool-name: tracker-hikari-cp
+      maximum-pool-size: 8
+
+  #web:
+  #  resources:
+  #    add-mappings: true
+
+mybatis:
+  mapper-locations: mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  port: 8083
+
+logging.base.dir: logs
+logging.config: classpath:logback-spring.xml
+
+datahub:
+  data:
+    # DataManager Server Info
+    base-uri: http://1.1.1.1:8080
+    sub-url:
+      datamodels: /datamodels
+      datasets: /datasets
+  label:
+    platform-id: bywDataHub01
+    # Ingest Interface Server Info
+    base-uri: http://1.1.1.1:8081
+    sub-uri:
+      collect: /entityOperations/upsert
+  sementic:
+    platform-id: bywDataHub01
+    base-uri: http://1.1.1.1:8082
+    sub-uri:
+      collect: /entityOperations/upsert
+
+onem2m:
+  authorization:
+    token:
+
+  label:
+    init-interworking-enabled: true # IPE Initialize Enable
+    platform-id: ketiOneM2MID01 # IPE Platform ID
+    base-uri: http://1.1.1.1:11000 # Mobius(oneM2M) Server Info
+    regist-application-id: S # Mobius(oneM2M) Http Header X_M2M_ORIGIN
+    context-path: /Mobius # Mobius(oneM2M) CSEBase Context Path
+    discovery-lbl: Iwked-Technology:NGSI-LD
+    notification.receive-uri: http://1.1.1.1:18083/onem2m/label/notifications # IPE Notification HTTP URL
+    dataset-id: ThermometerDemoDataset # Default Dataset-Id
+
+  sementic:
+    init-interworking-enabled: false
+    platform-id: testOneM2M01
+    base-uri: http://1.1.1.1:7599
+    regist-application-id: SM
+    context-path: /wdc_base
+    notification.receive-uri: http://1.1.1.1:58083/onem2m/sementic/notifications
+    ontology-reference: http://www.citydatahub.kr/ontologies/2021/1/sm_annotation
+    query-indicator: false
+    filter: "PREFIX  annotation: <http://www.citydatahub.kr/ontologies/2021/1/sm_annotation#>
+PREFIX  ngsi-ld: <http://uri.etsi.org/ngsi-ld/>
+PREFIX  rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT DISTINCT  ?entity
+WHERE {
+  ?entity  rdf:type ngsi-ld:Entity.
+  ?entity annotation:hasDomainType  ?entityType
+}"
+
+http:
+  pool:
+    max:
+      total: 200
+    defaultMaxPerRoute: 100
+    connection:
+      timeout: 5000
+      request:
+        timeout: 5000
+    read:
+      timeout: 30000
+    validate:
+      after:
+        inactivity: 2000

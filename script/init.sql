@@ -1,0 +1,25 @@
+
+CREATE TABLE IPE.CONTAINER_METADATA_BASE (
+    ID          VARCHAR(256),
+    SUB_URI     VARCHAR(1024),
+    PI          VARCHAR(256),
+    RI          VARCHAR(256),
+    TY          VARCHAR(256),
+    CT          VARCHAR(256),
+    ST          BIGINT,
+    RN          VARCHAR(256),
+    LT          VARCHAR(256),
+    ET          VARCHAR(256),
+    LBL         TEXT[],
+    CR          VARCHAR(256),
+    MNI         BIGINT,
+    MBS         BIGINT,
+    MIA         BIGINT,
+    CNI         BIGINT,
+    CBS         BIGINT,
+    CREATE_DATETIME TIMESTAMP WITH TIME ZONE NOT NULL,
+    CREATOR_ID      VARCHAR(64),
+    MODIFY_DATETIME TIMESTAMP WITH TIME ZONE,
+    MODIFIER_ID     VARCHAR(64),
+    CONSTRAINT ONEM2M_CONTAINER_METADATA_BASE_PK PRIMARY KEY (ID, SUB_URI)
+);

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.re.keti.sc.ipe.onem2m.mapper.ContainerMetadataMapper">
+
+    <resultMap id="containerMetadata" type="kr.re.keti.sc.ipe.interworking.label.vo.ContainerMetadataBaseVO">
+        <id property="id" column="ID"/>
+        <id property="subUri" column="SUB_URI"/>
+        <result property="pi" column="PI"/>
+        <result property="ri" column="RI"/>
+        <result property="ty" column="TY"/>
+        <result property="ct" column="CT"/>
+        <result property="st" column="ST"/>
+        <result property="lt" column="LT"/>
+        <result property="et" column="ET"/>
+        <result property="lbl" column="LBL" javaType="java.util.ArrayList" jdbcType="ARRAY"
+                typeHandler="kr.re.keti.sc.ipe.common.datamapperhandler.ListTypeHandler"/>
+        <result property="cr" column="CR"/>
+        <result property="mni" column="MNI"/>
+        <result property="mbs" column="MBS"/>
+        <result property="mia" column="MIA"/>
+        <result property="cni" column="CNI"/>
+        <result property="cbs" column="CBS"/>
+        <result property="createDatetime" column="CREATE_DATETIME"/>
+        <result property="creatorId" column="CREATOR_ID"/>
+        <result property="modifyDatetime" column="MODIFY_DATETIME"/>
+        <result property="modifierId" column="MODIFIER_ID"/>
+    </resultMap>
+
+    <select id="retrieveMappingRules" resultMap="containerMetadata">
+        SELECT  ID,
+                SUB_URI,
+                PI,
+                RI,
+                TY,
+                CT,
+                ST,
+                RN,
+                LT,
+                ET,
+                LBL,
+                CR,
+                MNI,
+                MBS,
+                MIA,
+                CNI,
+                CBS,
+                CREATE_DATETIME,
+                CREATOR_ID,
+                MODIFY_DATETIME,
+                MODIFIER_ID
+        FROM
+                IPE.CONTAINER_METADATA_BASE
+        <where>
+            <if test="id != null and id != ''">
+                AND	ID = #{id}
+            </if>
+            <if test="subUri != null and subUri != ''">
+                AND	SUB_URI = #{subUri}
+            </if>
+        </where>
+    </select>
+
+    <select id="retrieveMappingRule" resultMap="containerMetadata" parameterType="kr.re.keti.sc.ipe.interworking.label.vo.ContainerMetadataBaseVO">
+        SELECT  ID,
+                SUB_URI,
+                PI,
+                RI,
+                TY,
+                CT,
+                ST,
+                RN,
+                LT,
+                ET,
+                LBL,
+                CR,
+                MNI,
+                MBS,
+                MIA,
+                CNI,
+                CBS,
+                CREATE_DATETIME,
+                CREATOR_ID,
+                MODIFY_DATETIME,
+                MODIFIER_ID
+        FROM
+                IPE.CONTAINER_METADATA_BASE
+        WHERE
+                ID = #{id}
+        AND
+                SUB_URI = #{subUri}
+    </select>
+
+    <insert id="createContainerMetadata" parameterType="kr.re.keti.sc.ipe.interworking.label.vo.ContainerMetadataBaseVO">
+        INSERT INTO IPE.CONTAINER_METADATA_BASE (
+             ID
+            ,SUB_URI
+            ,PI
+            ,RI
+            ,TY
+            ,CT
+            ,ST
+            ,RN
+            ,LT
+            ,ET
+            ,LBL
+            ,CR
+            ,MNI
+            ,MBS
+            ,MIA
+            ,CNI
+            ,CBS
+            ,CREATE_DATETIME
+        <if test="creatorId != null">
+            ,CREATOR_ID
+        </if>
+            ,MODIFY_DATETIME
+        <if test="creatorId != null">
+            ,MODIFIER_ID
+        </if>
+        ) VALUES (
+        #{id}
+        ,#{subUri}
+        ,#{pi}
+        ,#{ri}
+        ,#{ty}
+        ,#{ct}
+        ,#{st}
+        ,#{rn}
+        ,#{lt}
+        ,#{et}
+        ,#{lbl, typeHandler=kr.re.keti.sc.ipe.common.datamapperhandler.StringArrayListTypeHandler}::TEXT[]
+        ,#{cr}
+        ,#{mni}
+        ,#{mbs}
+        ,#{mia}
+        ,#{cni}
+        ,#{cbs}
+        ,now()
+        <if test="creatorId != null">
+            ,#{creatorId}
+        </if>
+        ,now()
+        <if test="creatorId != null">
+            ,#{creatorId}
+        </if>
+        )
+    </insert>
+
+    <update id="updateContainerMetadata" parameterType="kr.re.keti.sc.ipe.interworking.label.vo.ContainerMetadataBaseVO">
+
+        UPDATE
+                IPE.CONTAINER_METADATA_BASE
+        SET
+                MODIFY_DATETIME = now()
+                <if test="modifierId != null">
+                    ,MODIFIER_ID = #{modifierId}
+                </if>
+                ,PI = #{pi}
+                ,RI = #{ri}
+                ,TY = #{ty}
+                ,CT = #{ct}
+                ,ST = #{st}
+                ,RN = #{rn}
+                ,LT = #{lt}
+                ,ET = #{et}
+                ,LBL = #{lbl, typeHandler=kr.re.keti.sc.ipe.common.datamapperhandler.StringArrayListTypeHandler}::TEXT[]
+                ,CR = #{cr}
+                ,MNI = #{mni}
+                ,MBS = #{mbs}
+                ,MIA = #{mia}
+                ,CNI = #{cni}
+                ,CBS = #{cbs}
+        WHERE
+                ID = #{id}
+        AND
+                SUB_URI = #{subUri}
+    </update>
+
+    <update id="deleteContainerMetadata" parameterType="kr.re.keti.sc.ipe.interworking.label.vo.ContainerMetadataBaseVO">
+        DELETE
+        FROM
+                IPE.CONTAINER_METADATA_BASE
+        WHERE
+                ID = #{id}
+            <if test="subUri != null and subUri != ''">
+                AND	SUB_URI = #{subUri}
+            </if>
+    </update>
+
+</mapper>
